@@ -43,12 +43,13 @@ def parse_articles(next_urls):
             html = download_page(url)
             soup = BeautifulSoup(html, "html.parser")
             title = soup.css.select("h1")[0]
+            image = soup.find("meta", property="og:image")["content"]
 
             results.append(
                 {
                     # "id": (i + 1),
                     "page_title": title.text.strip() if title.text else "",
-                    "image": soup.find("meta", property="og:image")["content"] if "live" not in url else "LIVE PAGE",
+                    "image": image if "live" not in url else "LIVE PAGE",
                     "url": url,
                     "tag": tag,
                 }
