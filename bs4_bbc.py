@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 BASE_URL = "https://www.bbc.com/"
+tags = []
 
 
 def download_page(url):
@@ -26,6 +27,8 @@ def parse_page(html):
     for current in soup.find_all("a", class_="media__link"):
         if "href" in current.attrs:
             results.append(normalize_url(current["href"]))
+        tags.append(current.find_next().text.strip())
+
     item["title"] = soup.title.text
     for url in list(set(results)):
         yield url
@@ -34,7 +37,7 @@ def parse_page(html):
 def parse_articles(next_urls):
     results = []
     try:
-        for i, url in enumerate(next_urls):
+        for i, (url, tag) in enumerate(zip(next_urls, tags)):
             html = download_page(url)
             soup = BeautifulSoup(html, "html.parser")
             title = soup.css.select("h1")[0]
@@ -42,6 +45,7 @@ def parse_articles(next_urls):
             results.append(
                 {
                     "id": (i + 1),
+                    "tag": tag,
                     "heading": title.text.strip() if title.text else "",
                 }
             )
