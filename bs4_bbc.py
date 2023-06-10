@@ -32,9 +32,22 @@ def parse_page(html):
 
 
 def parse_articles(next_urls):
+    results = []
     try:
         for i, url in enumerate(next_urls):
-            print(i + 1, url)
+            html = download_page(url)
+            soup = BeautifulSoup(html, "html.parser")
+            title = soup.css.select("h1")[0]
+
+            results.append(
+                {
+                    "id": (i + 1),
+                    "heading": title.text.strip() if title.text else "",
+                }
+            )
+
+        # results = [result.text.strip() if result.text else "" for result in results]
+        print(results)
     except StopIteration:
         pass
 
