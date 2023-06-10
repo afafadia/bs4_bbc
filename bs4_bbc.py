@@ -46,7 +46,6 @@ if __name__ == "__main__":
     while len(frontier) > 0:
         url_to_fetch = frontier.pop()
         html = download_page(url_to_fetch)
-        next_urls = parse_page(html)
-        parse_articles(next_urls)
+        parse_articles(parse_page(html))
 
         visited[url_to_fetch] = 0
