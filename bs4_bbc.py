@@ -42,7 +42,8 @@ def parse_articles(next_urls):
         for i, (url, tag) in enumerate(zip(next_urls, tags)):
             html = download_page(url)
             soup = BeautifulSoup(html, "html.parser")
-            title = soup.css.select("h1")[0]
+            title_list = soup.css.select("h1")
+            title = title_list[0] if title_list else ""
             image = soup.find("meta", property="og:image")["content"]
 
             results.append(
