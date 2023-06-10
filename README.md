@@ -11,3 +11,6 @@
 5. Install packages from `./requirements.txt` file: `pip install -r ./requirements.txt`
 
 ## Steps to get scraped results:
+
+1. Run command: `python bs4_bbc.py > bbc_feed.json`
+2. Check contents of file `./bbc_feed.json`: `less ./bbc_feed.json`

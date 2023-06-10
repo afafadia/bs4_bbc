@@ -1,3 +1,5 @@
+import json
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -44,14 +46,16 @@ def parse_articles(next_urls):
 
             results.append(
                 {
-                    "id": (i + 1),
+                    # "id": (i + 1),
+                    "page_title": title.text.strip() if title.text else "",
+                    "image": soup.find("meta", property="og:image")["content"] if "live" not in url else "LIVE PAGE",
+                    "url": url,
                     "tag": tag,
-                    "heading": title.text.strip() if title.text else "",
                 }
             )
 
-        # results = [result.text.strip() if result.text else "" for result in results]
-        print(results)
+        print(json.dumps(results, indent=4))
+
     except StopIteration:
         pass
 
