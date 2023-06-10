@@ -1,5 +1,3 @@
-# Code to scrap website "https://www.bbc.com" using BeautifulSoup
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -17,7 +15,7 @@ def normalize_url(url):
     if len(url) == 0:
         return ""
     if url[0] == "/":
-        return f"{BASE_URL}"
+        return f"https://www.bbc.com{url}"
     return url
 
 
@@ -27,10 +25,18 @@ def parse_page(html):
     soup = BeautifulSoup(html, "html.parser")
     for current in soup.find_all("a", class_="media__link"):
         if "href" in current.attrs:
-            # results.append(normalize_url(current["href"]))
-            results.append(current["href"])
+            results.append(normalize_url(current["href"]))
     item["title"] = soup.title.text
-    return list(set(results)), item
+    for url in list(set(results)):
+        yield url
+
+
+def parse_articles(next_urls):
+    try:
+        for i, url in enumerate(next_urls):
+            print(i + 1, url)
+    except StopIteration:
+        pass
 
 
 frontier = [BASE_URL]
@@ -40,7 +46,7 @@ if __name__ == "__main__":
     while len(frontier) > 0:
         url_to_fetch = frontier.pop()
         html = download_page(url_to_fetch)
-        next_urls, item = parse_page(html)
-        print(next_urls, item)
+        next_urls = parse_page(html)
+        parse_articles(next_urls)
 
         visited[url_to_fetch] = 0
