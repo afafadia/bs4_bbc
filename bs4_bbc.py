@@ -18,7 +18,8 @@ def normalize_url(url):
     if len(url) == 0:
         return ""
     if url[0] == "/":
-        return f"{BASE_URL[:-1]}{url}"
+        base_url = f"{BASE_URL}/" if BASE_URL[-1] != "/" else BASE_URL
+        return f"{base_url}{url}"
     return url
 
 
