@@ -40,7 +40,7 @@ def parse_page(html):
 def parse_articles(next_urls):
     results = []
     try:
-        for i, (url, tag) in enumerate(zip(next_urls, tags)):
+        for url, tag in zip(next_urls, tags):
             html = download_page(url)
             soup = BeautifulSoup(html, "html.parser")
             title_list = soup.css.select("h1")
@@ -49,7 +49,6 @@ def parse_articles(next_urls):
 
             results.append(
                 {
-                    # "id": (i + 1),
                     "page_title": title.text.strip() if title.text else "",
                     "image": image if "live" not in url else "LIVE PAGE",
                     "url": url,
